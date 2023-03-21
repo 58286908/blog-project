@@ -1,34 +1,70 @@
 <template>
-    <div>
-        <Toolbar
-            style="border-bottom: 1px solid #ccc"
-            :editor="editorRef"
-            :defaultConfig="toolbarConfig"
-            :mode="mode"
-          />
-          <Editor
-            style="height: 500px; overflow-y: hidden"
-            v-model="valueHtml"
-            :defaultConfig="editorConfig"
-            :mode="mode"
-            @onCreated="handleCreated"
-          />
-    </div>
+  <div>
+    <el-dialog ref="editorDialog" v-model="openDialog">
+    <el-select v-model="groupName" style="display: flex; justify-content: left;margin-bottom: 50px;" placeholder="请选择分组">
+      <el-option v-for="(item,index) in groupList" :label="item.label" :value="item.value" :key="index"></el-option>
+    </el-select>
+    <Toolbar
+      style="border-bottom: 1px solid #ccc; width: 70%"
+      :editor="editorRef"
+      :defaultConfig="toolbarConfig"
+      :mode="mode"
+    />
+    <Editor
+      style="height: 500px; overflow-y: hidden; width: 70%"
+      :value="valueHtml"
+      :defaultConfig="editorConfig"
+      :mode="mode"
+      @onCreated="handleCreated"
+    />
+  </el-dialog>
+  </div>
 </template>
 <script>
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, ref, shallowRef } from "vue";
+import { onBeforeUnmount, shallowRef } from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-
+import { ref } from 'vue';
+import { useVModel } from '@vueuse/core';
 export default {
   components: { Editor, Toolbar },
-  setup() {
+  props: {
+    valueHtml: {
+      type: String,
+    },
+    open: {
+      type: Boolean,
+      default:true
+    },
+  },
+  setup(props,{emit}) {
+    // console.log(emit)
+    const openDialog = useVModel(props,'open',emit)
+
+    //分组名称
+    let groupName = ref('');
+    
+    //分组集合
+    const groupList = [
+      {
+        label: "分组一",
+        value: "1",
+      },
+      {
+        label: "分组二",
+        value: "2",
+      },
+      {
+        label: "分组三",
+        value: "3",
+      },
+    ];
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef();
 
     // 内容 HTML
-    const valueHtml = ref("<p></p>");
+    // const valueHtml = ref("<p></p>");
 
     // 模拟 ajax 异步获取内容
     // onMounted(() => {
@@ -53,12 +89,13 @@ export default {
 
     return {
       editorRef,
-      valueHtml,
       mode: "default", // 或 'simple'
       toolbarConfig,
       editorConfig,
       handleCreated,
-
+      groupList,
+      groupName,
+      openDialog
     };
   },
 };

@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-16 22:08:19
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-03-20 01:55:41
+ * @LastEditTime: 2023-03-21 11:37:33
  * @FilePath: \vue3.0\src\view\MainPage.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -53,6 +53,8 @@
           </el-scrollbar></el-aside
         >
         <el-main>
+          <el-button @click="openEditorDialog">发布博客</el-button>
+          <wangEditor :open="openEditor"></wangEditor>
           <el-card
             :body-style="{ padding: '0px', marginBottom: '1px' }"
             v-for="item in lists"
@@ -69,10 +71,9 @@
               <span>{{ item.name }}</span>
               <div class="bottom card-header">
                 <span class="time">{{ currentDate }}</span>
-                <el-button
-                  class="button"
-                  @click="saveBlogs"
-                >发送请求</el-button>
+                <el-button class="button" @click="saveBlogs"
+                  >发送请求</el-button
+                >
               </div>
             </div>
           </el-card>
@@ -83,9 +84,11 @@
 </template>
 <script>
 // import save from "@/api/textInfo";
-import axios from 'axios'
+import axios from "axios";
+import wangEditor from "@/components/wangEditor";
 export default {
   name: "mainPageGrid",
+  components: { wangEditor },
   data() {
     return {
       lists: [],
@@ -104,19 +107,17 @@ export default {
           text: "32132132321321",
         },
       ],
+      openEditor: false,
     };
   },
   methods: {
     saveBlogs() {
-      axios.post('/api/blog/textInfo/save',{
-
-      }).then((res)=>[
-        console.log(res)
-      ])
-      // save().then(res=>{
-      //   console.log(res);
-      // })
-      // const obj = save;
+      axios
+        .post("/api/blog/textInfo/save", {})
+        .then((res) => [console.log(res)]);
+    },
+    openEditorDialog() {
+      this.openEditor = true;
     },
   },
   mounted() {
