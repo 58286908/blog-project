@@ -1,18 +1,19 @@
 <template>
   <div>
-    <el-dialog ref="editorDialog" v-model="openDialog">
-    <el-select v-model="groupName" style="display: flex; justify-content: left;margin-bottom: 50px;" placeholder="请选择分组">
+    <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog">
+    <el-select v-model="groupName" style="display: flex; justify-content: left;margin-bottom: 50px;width: 20%;" placeholder="请选择分组">
       <el-option v-for="(item,index) in groupList" :label="item.label" :value="item.value" :key="index"></el-option>
     </el-select>
+    <el-input v-model="title"></el-input>
     <Toolbar
-      style="border-bottom: 1px solid #ccc; width: 70%"
+      style="border-bottom: 1px solid #ccc;"
       :editor="editorRef"
       :defaultConfig="toolbarConfig"
       :mode="mode"
     />
     <Editor
-      style="height: 500px; overflow-y: hidden; width: 70%"
-      :value="valueHtml"
+      style="height: 500px; overflow-y: hidden;"
+      v-model="content"
       :defaultConfig="editorConfig"
       :mode="mode"
       @onCreated="handleCreated"
@@ -23,24 +24,33 @@
 <script>
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, shallowRef } from "vue";
+import { onBeforeUnmount, shallowRef,ref } from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-import { ref } from 'vue';
 import { useVModel } from '@vueuse/core';
 export default {
   components: { Editor, Toolbar },
   props: {
     valueHtml: {
-      type: String,
+      type: Object,
+      default:(()=>{}),
+      require:true
     },
     open: {
       type: Boolean,
-      default:true
+      default:false
     },
+    closeDialog:{
+      type:Object,
+      default:(()=>{})
+    }
   },
   setup(props,{emit}) {
     // console.log(emit)
     const openDialog = useVModel(props,'open',emit)
+    
+    const title = useVModel(props,'valueHtml',emit).value.title
+    
+    const content = useVModel(props,'valueHtml',emit).value.content
 
     //分组名称
     let groupName = ref('');
@@ -87,6 +97,7 @@ export default {
       editorRef.value = editor; // 记录 editor 实例，重要！
     };
 
+
     return {
       editorRef,
       mode: "default", // 或 'simple'
@@ -95,7 +106,9 @@ export default {
       handleCreated,
       groupList,
       groupName,
-      openDialog
+      openDialog,
+      title,
+      content,
     };
   },
 };
