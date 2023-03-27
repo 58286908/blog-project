@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-16 22:08:19
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-03-21 14:14:02
+ * @LastEditTime: 2023-03-25 14:21:02
  * @FilePath: \vue3.0\src\view\MainPage.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,6 +19,7 @@
               class="el-menu-vertical-demo"
               default-active="2"
               text-color="#fff"
+              :router="true"
             >
               <el-sub-menu index="1">
                 <template #title>
@@ -26,7 +27,12 @@
                   <span>Navigator One</span>
                 </template>
                 <el-menu-item-group title="Group One">
-                  <el-menu-item index="1-1">item one</el-menu-item>
+                  <el-menu-item  index="GenShin">
+                    <!-- <router-link to="/GenShin"> -->
+                      GenShin
+
+                    <!-- </router-link> -->
+                  </el-menu-item>
                   <el-menu-item index="1-2">item two</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group title="Group Two">
@@ -54,10 +60,13 @@
         >
         <el-main>
           <el-button @click="openEditorDialog">发布博客</el-button>
+          <router-link to="/GenShin">跳转到原神</router-link>
+          <router-view></router-view>
           <wangEditor
             :open="openEditor"
             :closeDialog="closeDialog"
             :valueHtml="valueHtml"
+            @on-change="cancel"
           ></wangEditor>
           <el-card
             :body-style="{ padding: '0px', marginBottom: '1px' }"
@@ -119,6 +128,9 @@ export default {
     };
   },
   methods: {
+    cancel(value){
+      console.log(value)
+    },
     saveBlogs() {
       axios
         .post("/api/blog/textInfo/save", {})

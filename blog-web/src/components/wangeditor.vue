@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog">
+      <el-button @click="btnClick"></el-button>
     <el-select v-model="groupName" style="display: flex; justify-content: left;margin-bottom: 50px;width: 20%;" placeholder="请选择分组">
       <el-option v-for="(item,index) in groupList" :label="item.label" :value="item.value" :key="index"></el-option>
     </el-select>
@@ -51,6 +52,10 @@ export default {
     const title = useVModel(props,'valueHtml',emit).value.title
     
     const content = useVModel(props,'valueHtml',emit).value.content
+
+    const btnClick = ()=>{
+      emit('on-change','加油')
+    }
 
     //分组名称
     let groupName = ref('');
@@ -109,6 +114,7 @@ export default {
       openDialog,
       title,
       content,
+      btnClick
     };
   },
 };
