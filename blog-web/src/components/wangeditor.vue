@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog" destroy-on-close>
+    <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog" destroy-on-close draggable align-center
+      :close-on-click-modal="false" title="发布博客">
       <!-- <el-button @click="btnClick"></el-button> -->
       <el-form ref="wangForm" :model="form" status-icon :rules="rules">
         <el-form-item label="分组" prop="groupName">

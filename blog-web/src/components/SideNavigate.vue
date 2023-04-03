@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-29 22:29:24
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-03-29 23:45:55
+ * @LastEditTime: 2023-03-31 10:05:11
  * @FilePath: \blog-web\src\components\Navigate.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,8 +19,8 @@
             <span>Java</span>
           </template>
           <el-menu-item-group title="Group One">
-            <el-menu-item index="GenShin">
-              GenShin
+            <el-menu-item index="123456" :route="{ path: '/BlogContent', query: { id: 123456 } }">
+              Java基础（一）
             </el-menu-item>
             <el-menu-item index="1-2">item two</el-menu-item>
           </el-menu-item-group>
