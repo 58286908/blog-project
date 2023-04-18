@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog" destroy-on-close draggable align-center
-      :close-on-click-modal="false" title="发布博客">
+      :close-on-click-modal="false" title="发布博客" width="80vw">
       <!-- <el-button @click="btnClick"></el-button> -->
       <el-form ref="wangForm" :model="form" status-icon :rules="rules">
         <el-form-item label="分组" prop="groupName">
@@ -21,6 +21,7 @@
 
         <Editor style="height: 500px; overflow-y: hidden;" v-model="form.content" :defaultConfig="editorConfig"
           :mode="mode" @onCreated="handleCreated" />
+        <el-button type="primary" @click="saveContent">发布</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -28,10 +29,12 @@
 <script>
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, shallowRef, ref, onMounted, reactive } from "vue";
+import { onBeforeUnmount, shallowRef, onMounted, reactive } from "vue";
 import { FormRules } from 'element-plus';
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { useVModel } from '@vueuse/core';
+import { save } from '@/api/textInfo'
+
 export default {
   components: { Editor, Toolbar },
   props: {
@@ -80,7 +83,7 @@ export default {
     const editorRef = shallowRef();
 
     // 发布框form
-    const form = ref({});
+    const form = reactive({});
 
     // 模拟 ajax 异步获取内容
     // onMounted(() => {
@@ -91,6 +94,13 @@ export default {
 
     const toolbarConfig = {};
     const editorConfig = { placeholder: "请输入内容..." };
+
+    const saveContent = (() => {
+      console.log(form)
+      save(form).then(res => {
+        console.log(res)
+      })
+    })
 
     // 组件销毁时，也及时销毁编辑器
     onBeforeUnmount(() => {
@@ -120,6 +130,7 @@ export default {
       btnClick,
       form,
       rules,
+      saveContent
     };
   },
 };

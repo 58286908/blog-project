@@ -18,7 +18,7 @@ public class BlogApplication {
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");
         log.info("\n----------------------------------------------------------\n\t" +
-                "Today Application is running! Access URLs:\n\t" +
+                "Blog Application is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + "/\n\t" +
                 "External: \thttp://" + ip + ":" + port + "/\n\t" +
                 "----------------------------------------------------------");
