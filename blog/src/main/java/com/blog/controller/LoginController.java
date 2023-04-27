@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/sys-user/")
 public class LoginController {
 
-    @Autowired
+    @Resource
     private ISysUserService sysUserService;
     @Resource
     private SysMenuMapper sysMenuMapper;

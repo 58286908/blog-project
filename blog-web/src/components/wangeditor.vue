@@ -1,15 +1,13 @@
 <template>
   <div>
-    <el-dialog ref="editorDialog" v-model="openDialog" :before-close="closeDialog" destroy-on-close draggable align-center
-      :close-on-click-modal="false" title="发布博客" width="80vw">
+    <el-dialog ref="editorDialog" @open="openDlg" v-model="openDialog" :before-close="closeDialog" destroy-on-close
+      draggable align-center :close-on-click-modal="false" title="发布博客" width="80vw">
       <!-- <el-button @click="btnClick"></el-button> -->
-      <el-form ref="wangForm" :model="form" status-icon :rules="rules">
-        <el-form-item label="分组" prop="groupName">
+      <el-form ref="wangForm" :model="form" status-icon>
+        <el-form-item label="分组" prop="menuId">
           <el-col :span="8">
-            <el-select v-model="form.groupName" placeholder="请选择分组" style="width: 100%;">
-              <el-option v-for="(item, index) in groupList" :label="item.label" :value="item.value"
-                :key="index"></el-option>
-            </el-select>
+            <el-cascader style="width: 100%;" v-model="form.menuId" :options="options" @change="handleChange"
+              :props="cascaderProp" clearable />
           </el-col>
         </el-form-item>
         <el-form-item label="标题" prop="title">
@@ -29,12 +27,12 @@
 <script>
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, shallowRef, onMounted, reactive } from "vue";
+import { onBeforeUnmount, shallowRef, onMounted, reactive, getCurrentInstance } from "vue";
 import { FormRules } from 'element-plus';
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { useVModel } from '@vueuse/core';
-import { save } from '@/api/textInfo'
-
+import { save, update } from '@/api/textInfo'
+import { listByMenu } from "@/api/SysMenu"
 export default {
   components: { Editor, Toolbar },
   props: {
@@ -50,6 +48,10 @@ export default {
     closeDialog: {
       type: Function,
       default: (() => { })
+    },
+    wangForm: {
+      type: Object,
+      default: (() => { })
     }
   },
   setup (props, { emit }) {
@@ -59,31 +61,41 @@ export default {
       ],
     })
     const openDialog = useVModel(props, 'open', emit)
+    const form = useVModel(props, "wangForm", emit)
+    // const value = reactive([])
+    //下拉框选择值改变时
+    const handleChange = (val) => {
+      const id = val[(val.length - 1)]
+      form.value.menuId = id
+    }
+
+    let options = reactive([])
+
+    const { proxy } = getCurrentInstance()
+
+    async function listMenu () {
+      options.length = 0
+      await listByMenu().then((res) => {
+        // res.data.data.map(res => {
+        //   res.label = res.menuName
+        //   res.value = res.menuName
+        // })
+        options.push(...res.data.data)
+        // console.log(options)
+        if (res.data.code !== 200)
+          proxy.$message.error(res.data.msg)
+      })
+    }
 
     const btnClick = () => {
       emit('on-change', '加油')
     }
 
-    //分组集合
-    const groupList = [
-      {
-        label: "分组一",
-        value: "1",
-      },
-      {
-        label: "分组二",
-        value: "2",
-      },
-      {
-        label: "分组三",
-        value: "3",
-      },
-    ];
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef();
 
     // 发布框form
-    const form = reactive({});
+    // const form = reactive({});
 
     // 模拟 ajax 异步获取内容
     // onMounted(() => {
@@ -92,15 +104,26 @@ export default {
     // }, 1500);
     // });
 
+    const cascaderProp = reactive({
+      value: 'id',
+      label: 'menuName',
+      expandTrigger: 'hover'
+    })
+
     const toolbarConfig = {};
     const editorConfig = { placeholder: "请输入内容..." };
 
-    const saveContent = (() => {
-      console.log(form)
-      save(form).then(res => {
-        console.log(res)
+    function saveContent () {
+      const request = form.value.id ? update : save
+      request(form.value).then(res => {
+        if (res.data.code === 200) {
+          proxy.$message.success(res.data.msg)
+          proxy.$parent.cardChangeCard()
+        } else {
+          proxy.$message.error(res.data.msg)
+        }
       })
-    })
+    }
 
     // 组件销毁时，也及时销毁编辑器
     onBeforeUnmount(() => {
@@ -109,9 +132,14 @@ export default {
       editor.destroy();
     });
 
-    onMounted(() => {
-
+    //打开弹窗触发
+    const openDlg = (() => {
+      listMenu()
     })
+
+    onMounted(() => {
+    })
+
     const handleCreated = (editor) => {
       editorRef.value = editor; // 记录 editor 实例，重要！
     };
@@ -123,14 +151,17 @@ export default {
       toolbarConfig,
       editorConfig,
       handleCreated,
-      groupList,
       openDialog,
       // title,
       // content,
       btnClick,
       form,
       rules,
-      saveContent
+      saveContent,
+      handleChange,
+      cascaderProp,
+      options,
+      openDlg
     };
   },
 };

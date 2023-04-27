@@ -1,0 +1,5 @@
+@charset "UTF-8";
+html.dark {
+  /* 自定义深色背景颜色 */
+  --af-bg-color: #000000;
+}

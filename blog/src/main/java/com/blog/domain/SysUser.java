@@ -1,6 +1,8 @@
 package com.blog.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,6 +15,7 @@ public class SysUser implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @TableId(value = "id",type= IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @TableField("user_name")

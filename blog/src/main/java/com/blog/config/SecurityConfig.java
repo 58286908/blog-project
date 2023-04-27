@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -47,8 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //不通过session获取SecurityContext
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 http.authorizeRequests()
-                //对于登录接口 允许匿名访问
-                .antMatchers("/sys-user/login","/sys-user/test").anonymous()
+                //匿名访问
+                .antMatchers("/sys-user/login",
+                        "/blog-textInfo/list",
+                        "/sys-menu/listByMenu",
+                        "/blog-textInfo/id/*"
+                        ).anonymous()
                 //除上面以外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //添加过滤器

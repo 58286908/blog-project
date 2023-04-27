@@ -1,9 +1,8 @@
 package com.blog.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,6 +16,7 @@ public class TextInfo implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @TableId(value = "id",type= IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @TableField("title")
@@ -24,6 +24,16 @@ public class TextInfo implements Serializable {
 
     @TableField("content")
     private String content;
+
+    @TableField("menu_name")
+    private String menuName;
+
+    @TableField("menu_id")
+    private Long menuId;
+
+    @TableField("valid_status")
+    @TableLogic
+    private Integer validStatus;
 
     @TableField("create_time")
     private LocalDateTime createTime;

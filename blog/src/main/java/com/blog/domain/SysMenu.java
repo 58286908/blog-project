@@ -1,12 +1,12 @@
 package com.blog.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @TableName("sys_menu")
 @Data
@@ -15,6 +15,7 @@ public class SysMenu implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @TableId(value = "id",type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @TableField("menu_name")
@@ -37,4 +38,15 @@ public class SysMenu implements Serializable {
 
     @TableField("icon")
     private String icon;
+
+    @TableField("parent_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long parentId;
+
+    @TableField("valid_status")
+    @TableLogic
+    private Integer validStatus;
+
+    @TableField(exist = false)
+    private List<SysMenu> children;
 }

@@ -26,4 +26,6 @@ public class ResponseResult<T> {
         this.code = code;
         this.data = data;
     }
+
+
 }

@@ -2,36 +2,31 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-30 11:11:18
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-04-19 02:25:42
+ * @LastEditTime: 2023-04-27 15:33:44
  * @FilePath: \blog-web\src\components\BlogMain.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <!-- <el-button @click="openEditorDialog">发布博客</el-button> -->
+  <MenuSort :menuFormProp="menuForm" :saveMenu="saveMenu" :menuDialog="menuDialog" :closeMenuDialog="closeMenuDialog" />
 
-  <WangEditor :open="openEditor" :closeDialog="closeDialog" @on-change="cancel" />
-  <el-scrollbar max-height="90vh" view-style="background-color: #f2f3f5;padding-left: 20px;padding-right: 20px;">
-  <div style="background-color:#B5B8BD;padding: 20px;">
-    <el-card style="background-color: #545C64;height: 32vh;">123</el-card>
-    <el-button type="primary" @click="openEditorDialog">发布博客</el-button>
-  </div>
-  <el-row :gutter="24">
+  <WangEditor :open="openEditor" :closeDialog="closeDialog" @reload="cardChangeCard" :wangForm="wangForm" />
+  <el-scrollbar max-height="90vh" view-style="padding-left: 20px;padding-right: 20px;">
+    <div style="background-color:#262727;padding: 20px;">
+      <el-card style="background-color: #545C64;height: 32vh;">123</el-card>
+      <el-button color="#626aef" :dark="isDark" @click="openEditorDialog">发布博客</el-button>
+      <el-button color="#626aef" :dark="isDark" @click="openMenuDialog">新增菜单</el-button>
+    </div>
+    <el-row :gutter="24" v-if="cardOpen">
       <el-col :xl="8" :lg="12" :xs="24" v-for="item in lists" :key="item.title">
-        <el-card style="opacity: 0.9;margin-top: 20px;width: 100%;height: 25vh;font-size: 18px;">
-          <!-- <template>
-                                                                                                                                                                                      <div>
-                                                                                                                                                                                        <span>Card name</span>
-                                                                                                                                                                                        <el-button class="button">Operation button</el-button>
-                                                                                                                                                                                      </div>
-                                                                                                                                                                                    </template> -->
-          <router-link style="align:left;" to="/BlogContent"><span class="title-font">{{ item.title
-          }}</span></router-link>
-          <div>
-            <span class="time" v-html="item.content"></span>
-          </div>
+        <el-card style=" opacity: 0.9;margin-top: 20px;width: 100%;height: 25vh;font-size: 18px;">
+          <router-link to="/BlogContent">
+            <p class="card-title">{{ item.title }}</p>
+          </router-link>
+          <p class="card-content" v-html="item.content">
+          </p>
           <div style="float: right;">
-            <el-button type="primary" @click="openEditorDialog">阅读</el-button>
-            <el-button type="primary" @click="openEditorDialog">编辑</el-button>
+            <el-button color="#626aef" :dark="isDark" @click="blogContentToRead(item.id, item.menuName)">阅读</el-button>
+            <el-button color="#626aef" :dark="isDark" @click="blogContentUpdate(item.id)">编辑</el-button>
           </div>
         </el-card>
       </el-col>
@@ -41,97 +36,130 @@
 </template>
 
 <script>
+import { save } from "@/api/SysMenu"
 import WangEditor from "@/components/WangEditor";
-import { ref, onMounted } from "vue";
-import { list } from "@/api/textInfo"
+import MenuSort from "@/components/MenuSort";
+import { ref, reactive, onMounted, getCurrentInstance, nextTick } from "vue";
+import { list, getById } from "@/api/textInfo"
+import { useRoute, useRouter } from 'vue-router';
 export default {
-  components: { WangEditor },
+  components: { WangEditor, MenuSort },
   setup () {
-    // const lists = ref(
-    //   [
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
-    //       name: "鹿",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-    //       name: "马",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-    //       name: "山狮",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-    //       name: "马",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-    //       name: "山狮",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-    //       name: "马",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-    //       name: "山狮",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-    //       name: "马",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-    //       name: "山狮",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
-    //       name: "马",
-    //     },
-    //     {
-    //       imgUrl:
-    //         "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
-    //       name: "山狮",
-    //     },
-    //   ]
-    // )
-    let currentDate = "2021-06-01"
+    const isDark = ref(true)
+    const { proxy } = getCurrentInstance()
+    const cardOpen = ref(true)
 
+    function cardChangeCard () {
+      cardOpen.value = false
+      openEditor.value = false
+      listCard()
+      nextTick(() => {
+        cardOpen.value = true
+      })
+    }
+    //菜单-新增打开方法
+    const openMenuDialog = (() => {
+      menuDialog.value = true
+    })
+
+    //新增-菜单关闭回调
+    const closeMenuDialog = (() => {
+      menuDialog.value = false
+      // console.log(menuDialog)
+    })
+
+    //新增-菜单显示控制
+    const menuDialog = ref(false)
+
+    //菜单-新增
+    const saveMenu = (() => {
+      save(menuForm).then(res => {
+        res.data.code === 200 ? proxy.$message.success(res.data.msg) : proxy.$message.error(res.data.msg)
+        menuDialog.value = false
+      })
+
+      // console.log(menuForm)
+    });
+
+    //wangForm表单
+    const wangForm = reactive({
+      menuId: '',
+      title: '',
+      content: ''
+    })
+
+    //菜单表单
+    const menuForm = reactive({
+      menuName: '',
+      perms: '',
+      parentId: ''
+    })
+    //富文本显示
     const openEditor = ref(false)
 
+    //emit练习
     const cancel = ((value) => {
       console.log(value)
     });
+
+    //保存富文本
     const saveBlogs = (() => {
     });
 
+    //卡片集合
     let lists = ref([])
 
+    //打开富文本
     const openEditorDialog = (() => {
       openEditor.value = true
     });
 
+    //关闭富文本
     const closeDialog = (() => {
       openEditor.value = false
-      console.log(openEditor.value)
+      wangForm.id = ''
+      wangForm.content = ''
+      wangForm.title = ''
     });
 
-    list().then(res => {
-      // console.log(res)
-      lists.value = res.data.data
-      console.log(lists)
+    const route = useRoute()
+    const menu = reactive({
+      menuName: '无'
     })
+
+    function queryParm () {
+      if (route.query.menuName != undefined) {
+        menu.menuName = route.query.menuName
+      }
+    }
+    queryParm()
+    //查询卡片集合
+    function listCard () {
+      list(menu.menuName).then(res => {
+        lists.value = res.data.data
+      })
+    }
+    listCard()
+    const router = useRouter();
+
+    function blogContentToRead (id, menuName) {
+      router.push({
+        path: '/blogContent',
+        query: {
+          id: id,
+          menuName: menuName
+        },
+      })
+    }
+
+    function blogContentUpdate (id) {
+      getById(id).then(res => {
+        if (res.data.code === 200) {
+          Object.assign(wangForm, res.data.data)
+          openEditor.value = true
+        }
+      })
+    }
     onMounted(() => {
 
 
@@ -143,8 +171,19 @@ export default {
       openEditorDialog,
       closeDialog,
       lists,
-      currentDate,
       openEditor,
+      menuForm,
+      saveMenu,
+      menuDialog,
+      closeMenuDialog,
+      openMenuDialog,
+      isDark,
+      blogContentToRead,
+      queryParm,
+      wangForm,
+      blogContentUpdate,
+      cardOpen,
+      cardChangeCard
     }
   },
 }
@@ -157,5 +196,27 @@ export default {
 
 .title-font:hover {
   color: blue;
+}
+
+.card-content {
+  white-space: normal;
+  word-break: break-all;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-title {
+  white-space: normal;
+  word-break: break-all;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  width: 100%;
 }
 </style>
