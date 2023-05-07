@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,7 @@ public class SysMenuController {
 //    @PreAuthorize("hasAuthority('admin')")
     public ResponseResult listByMenu() {
         List<SysMenu> sysMenuList = sysMenuService.list();
+        List<SysMenu> deleteList = new ArrayList<>();
         if (sysMenuList != null && sysMenuList.size() > 0) {
             for (int i = 0; i < sysMenuList.size(); i++) {
                 SysMenu sysMenu = sysMenuList.get(i);
@@ -43,16 +45,31 @@ public class SysMenuController {
                 if (sysMenu.getParentId() == null) {
                     for (SysMenu menuItem : sysMenuList) {
                         if (menuItem.getParentId() != null)
-                            if (sysMenu.getId().longValue() == menuItem.getParentId().longValue())
+                            if (sysMenu.getId().longValue() == menuItem.getParentId().longValue()){
                                 childList.add(menuItem);
+                            }
                             else
                                 continue;
                     }
                     sysMenu.setChildren(childList);
 
                 }else{
-                    sysMenuList.remove(i);
+                    deleteList.add(sysMenu);
                 }
+            }
+            //将处理好的数据中的子菜单从中删除
+            Iterator<SysMenu> iterable = sysMenuList.iterator();
+            while (iterable.hasNext()){
+                SysMenu sysMenu = iterable.next();
+                for(SysMenu d : deleteList){
+                    if(sysMenu.getId().toString().equals(d.getId().toString())){
+                        iterable.remove();
+                    }
+                }
+
+
+
+
             }
         }
         return new ResponseResult(200, sysMenuList);

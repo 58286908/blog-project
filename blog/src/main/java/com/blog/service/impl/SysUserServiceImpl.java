@@ -38,8 +38,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public ResponseResult<SysUser> login(SysUser sysUser) {
-        //进行用户验证
+        //存储用户信息
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(sysUser.getUsername(),sysUser.getPassword());
+        //验证用户
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         if(Objects.isNull(authentication)){
             throw new RuntimeException("认证未通过");

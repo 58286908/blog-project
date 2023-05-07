@@ -93,7 +93,6 @@ export default {
 
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef();
-
     // 发布框form
     // const form = reactive({});
 
@@ -113,8 +112,9 @@ export default {
     const toolbarConfig = {};
     const editorConfig = { placeholder: "请输入内容..." };
 
-    function saveContent () {
+    async function saveContent () {
       const request = form.value.id ? update : save
+      form.value.textContent = editorRef.value.getText()
       request(form.value).then(res => {
         if (res.data.code === 200) {
           proxy.$message.success(res.data.msg)
@@ -161,7 +161,7 @@ export default {
       handleChange,
       cascaderProp,
       options,
-      openDlg
+      openDlg,
     };
   },
 };

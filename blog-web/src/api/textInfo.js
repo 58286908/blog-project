@@ -11,7 +11,7 @@ import {anonymous} from '@/utils/request'
 
 export function save(data){
   return request({
-    url:'/api/blog-textInfo/save',
+    url:'/blog-textInfo/save',
     method: 'post',
     data: data
   })
@@ -19,7 +19,7 @@ export function save(data){
 
 export function update(data){
   return request({
-    url:'/api/blog-textInfo/update',
+    url:'/blog-textInfo/update',
     method: 'put',
     data: data 
   })
@@ -27,13 +27,13 @@ export function update(data){
 
 export function getById(id){
   return anonymous({
-    url:'/api/blog-textInfo/id/'+id,
+    url:'/blog-textInfo/id/'+id,
   })
 }
 
 export function list(data){
   return anonymous({
-    url:'/api/blog-textInfo/list',
+    url:'/blog-textInfo/list',
     method: 'post',
     headers: {
       'Content-Type': 'text/plain'

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**","/js/**","/index.html","/img/**","/fonts/**","/favicon.ico");
+
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 //关闭csrf
@@ -51,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/blog-textInfo/list",
                         "/sys-menu/listByMenu",
                         "/blog-textInfo/id/*"
-                        ).anonymous()
+                        ).permitAll()
                 //除上面以外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //添加过滤器

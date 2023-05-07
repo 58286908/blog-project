@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class TextInfoController {
 
     @PutMapping("update")
     @PreAuthorize("hasAuthority('admin')")
-    public ResponseResult update(@RequestBody TextInfo textInfo){
+    public ResponseResult update(@RequestBody @Valid TextInfo textInfo){
         textInfoService.updateById(textInfo);
         return new ResponseResult(200,"修改成功");
     }
@@ -47,12 +48,13 @@ public class TextInfoController {
     @PostMapping("list")
     public ResponseResult list(@RequestBody String menuName) {
         List<TextInfo> list;
+        QueryWrapper<TextInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().orderByDesc(TextInfo::getCreateTime);
         if (StringUtils.hasText(menuName) && !menuName.equals("无")) {
-            QueryWrapper<TextInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(TextInfo::getMenuName, menuName);
             list = textInfoService.list(queryWrapper);
         } else {
-            list = textInfoService.list();
+            list = textInfoService.list(queryWrapper);
         }
         List<SysMenu> menuList = sysMenuService.list();
         for (TextInfo textInfo : list) {

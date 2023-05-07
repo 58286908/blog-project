@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-20 02:10:02
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-04-21 21:19:50
+ * @LastEditTime: 2023-04-28 21:49:32
  * @FilePath: \blog-web\src\utils\request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,7 +18,7 @@ import axios from 'axios'
 // Vue.prototype.$axios = axios
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-
+axios.defaults.baseURL = '/api'
 // 创建axios实例
 const service = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分

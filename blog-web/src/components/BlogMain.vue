@@ -2,29 +2,45 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-30 11:11:18
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-04-27 15:33:44
+ * @LastEditTime: 2023-05-02 21:53:00
  * @FilePath: \blog-web\src\components\BlogMain.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <MenuSort :menuFormProp="menuForm" :saveMenu="saveMenu" :menuDialog="menuDialog" :closeMenuDialog="closeMenuDialog" />
+  <MenuSort ref="menuSort" :menuFormProp="menuForm" :saveMenu="saveMenu" :closeMenuDialog="closeMenuDialog" />
 
   <WangEditor :open="openEditor" :closeDialog="closeDialog" @reload="cardChangeCard" :wangForm="wangForm" />
   <el-scrollbar max-height="90vh" view-style="padding-left: 20px;padding-right: 20px;">
-    <div style="background-color:#262727;padding: 20px;">
-      <el-card style="background-color: #545C64;height: 32vh;">123</el-card>
-      <el-button color="#626aef" :dark="isDark" @click="openEditorDialog">发布博客</el-button>
-      <el-button color="#626aef" :dark="isDark" @click="openMenuDialog">新增菜单</el-button>
+    <div style="background-color:#262727;padding: 20px">
+      <el-card style="background-color: #545C64;height: 32vh;position: relative;">
+        <transition name="el-fade-in">
+          <p class="transition-box">我爱代码，BUG爱我，我们都有光明的未来</p>
+        </transition>
+        <div style="position: absolute;left: 20px;bottom: 10px;">
+          <el-avatar style="border: #000 solid 5px;" :size="120" :src="headUrl" />
+        </div>
+
+      </el-card>
+      <div style="margin-top: 5px;">
+        <el-button color="#626aef" :dark="isDark" @click="openEditorDialog">发布博客</el-button>
+        <el-button color="#626aef" :dark="isDark" @click="openMenuDialog">新增菜单</el-button>
+      </div>
     </div>
     <el-row :gutter="24" v-if="cardOpen">
       <el-col :xl="8" :lg="12" :xs="24" v-for="item in lists" :key="item.title">
-        <el-card style=" opacity: 0.9;margin-top: 20px;width: 100%;height: 25vh;font-size: 18px;">
-          <router-link to="/BlogContent">
+        <el-card style=" opacity: 0.9;margin-top: 20px;width: 100%;height: 25vh;position: relative;">
+          <router-link :to="{
+              path: '/BlogContent', query: {
+                id: item.id,
+                menuName: item.menuName
+              }
+            }">
             <p class="card-title">{{ item.title }}</p>
           </router-link>
-          <p class="card-content" v-html="item.content">
+          <p class="card-content">
+            {{ item.textContent }}
           </p>
-          <div style="float: right;">
+          <div style="position: absolute;bottom: 20px; right: 20px">
             <el-button color="#626aef" :dark="isDark" @click="blogContentToRead(item.id, item.menuName)">阅读</el-button>
             <el-button color="#626aef" :dark="isDark" @click="blogContentUpdate(item.id)">编辑</el-button>
           </div>
@@ -48,6 +64,7 @@ export default {
     const isDark = ref(true)
     const { proxy } = getCurrentInstance()
     const cardOpen = ref(true)
+    const headUrl = 'https://avatars.githubusercontent.com/u/94176780?v=4'
 
     function cardChangeCard () {
       cardOpen.value = false
@@ -59,13 +76,13 @@ export default {
     }
     //菜单-新增打开方法
     const openMenuDialog = (() => {
-      menuDialog.value = true
+      proxy.$refs.menuSort.sortOpen = true
+      console.log(proxy)
     })
 
     //新增-菜单关闭回调
     const closeMenuDialog = (() => {
-      menuDialog.value = false
-      // console.log(menuDialog)
+      proxy.$refs.menuSort.sortOpen = false
     })
 
     //新增-菜单显示控制
@@ -161,8 +178,6 @@ export default {
       })
     }
     onMounted(() => {
-
-
     })
 
     return {
@@ -183,7 +198,8 @@ export default {
       wangForm,
       blogContentUpdate,
       cardOpen,
-      cardChangeCard
+      cardChangeCard,
+      headUrl
     }
   },
 }
@@ -196,6 +212,10 @@ export default {
 
 .title-font:hover {
   color: blue;
+}
+
+.transition-box {
+  text-align: center;
 }
 
 .card-content {

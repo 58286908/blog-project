@@ -1,11 +1,14 @@
 package com.blog.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.blog.annotation.BlogLogs;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -19,12 +22,15 @@ public class TextInfo implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @BlogLogs(output = false)
     @TableField("title")
     private String title;
 
+    @BlogLogs(output = false)
     @TableField("content")
     private String content;
 
+    @BlogLogs(output = false)
     @TableField("menu_name")
     private String menuName;
 
@@ -35,9 +41,14 @@ public class TextInfo implements Serializable {
     @TableLogic
     private Integer validStatus;
 
-    @TableField("create_time")
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
-    @TableField("update_time")
+    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
+
+    @TableField("text_content")
+    private String textContent;
 }

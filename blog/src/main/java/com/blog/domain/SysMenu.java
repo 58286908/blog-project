@@ -1,6 +1,7 @@
 package com.blog.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.blog.annotation.BlogLogs;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class SysMenu implements Serializable {
     private Long id;
 
     @TableField("menu_name")
+    @BlogLogs(output = false)
     private String menuName;
 
     @TableField("path")

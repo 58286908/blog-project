@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-29 22:29:24
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-04-27 01:27:19
+ * @LastEditTime: 2023-05-05 11:01:39
  * @FilePath: \blog-web\src\components\Navigate.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,12 +10,18 @@
   <el-aside width="12vw" style="height: 100vh;">
     <el-scrollbar ref="scrollbar">
       <el-menu default-active="1" :router="true">
-        <el-sub-menu v-for="(item, index) in menuList" :index="index + ''" :value="item.id" :label="item.menName"
-          :key="item.id">
+        <!-- {{ menuList }} -->
+        <el-sub-menu v-for="item in menuList" :index="item.id + ''" :value="item.id" :label="item.menName" :key="item.id">
           <template #title>
-            <el-icon>
+            <el-icon v-if="item.icon != 'Vue'">
               <component v-if="item.icon != '#'" :is="item.icon"></component>
             </el-icon>
+            <svg v-if="item.icon == 'Vue'" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 256 221"
+              style="padding-right: 10px;margin-left: 3px;">
+              <path fill="#41B883" d="M204.8 0H256L128 220.8L0 0h97.92L128 51.2L157.44 0h47.36Z" />
+              <path fill="#41B883" d="m0 0l128 220.8L256 0h-51.2L128 132.48L50.56 0H0Z" />
+              <path fill="#35495E" d="M50.56 0L128 133.12L204.8 0h-47.36L128 51.2L97.92 0H50.56Z" />
+            </svg>
             <!-- <el-icon> -->
             <!-- <CoffeeCup></CoffeeCup> -->
             <!-- <component v-if="item.icon != '#'" :is="item.icon"></component> -->
@@ -23,8 +29,8 @@
             <span style="font-size: medium;">{{ item.menuName }}</span>
           </template>
           <div v-if="item.children != null">
-            <el-menu-item-group v-for="(o, index) in item.children" :key="o.id">
-              <el-menu-item :index="index + ''" :route="{ path: '/index', query: { menuName: o.menuName } }">
+            <el-menu-item-group v-for="o in item.children" :key="o.id">
+              <el-menu-item :index="o.id + ''" :route="{ path: '/index', query: { menuName: o.menuName } }">
                 <span style="margin-left: 20px;">{{ o.menuName }}</span>
               </el-menu-item>
             </el-menu-item-group>
