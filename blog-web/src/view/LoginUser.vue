@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-04-03 14:00:51
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-04 12:06:23
+ * @LastEditTime: 2023-05-13 02:34:18
  * @FilePath: \blog-web\src\components\LoginTemplate.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -40,65 +40,55 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 // import { useVModel } from '@vueuse/core';
-import { useCookies } from "vue3-cookies";
+// import { useCookies } from "vue3-cookies";
 import { login } from "@/api/sysUser";
 import router from '@/router';
 
-export default {
+const loginForm = reactive({
+  username: '',
+  password: ''
+})
 
-  setup () {
-    const loginForm = reactive({
-      username: '',
-      password: ''
-    })
+const btnLoading = ref<boolean>(false)
+const { proxy }: any = getCurrentInstance()
 
-    const btnLoading = ref(false)
-    const { proxy } = getCurrentInstance()
+// const route = router
+// console.log(route)
+const loginRules = {}
+// const login = useVModel(props, 'loginForm', emit)
 
-    // const route = router
-    // console.log(route)
-    const loginRules = {}
-    // const login = useVModel(props, 'loginForm', emit)
+// const { cookies }: any = useCookies();
+// cookies.set("username", "123456", "123")
+// console.log(cookies)
 
-    const { cookies } = useCookies();
-    // cookies.set("username", "123456", "123")
-    // console.log(cookies)
-
-    function handlerLogin () {
-      btnLoading.value = true
-      login(loginForm).then(res => {
-        if (res.data.code === 200) {
-          sessionStorage.setItem("token", res.data.data.Authorization)
-          sessionStorage.setItem("nickName", res.data.data.nickName)
-          router.push('/')
-          proxy.$message.success('登录成功')
-          btnLoading.value = false
-        } else {
-          proxy.$message.error(res.data.msg)
-          btnLoading.value = false
-        }
-      }).catch(error => {
-        btnLoading.value = false
-      })
+function handlerLogin() {
+  btnLoading.value = true
+  login(loginForm).then(res => {
+    if (res.data.code === 200) {
+      sessionStorage.setItem("token", res.data.data.Authorization)
+      sessionStorage.setItem("nickName", res.data.data.nickName)
+      router.push('/')
+      proxy.$message.success('登录成功')
+      btnLoading.value = false
+    } else {
+      proxy.$message.error(res.data.msg)
+      btnLoading.value = false
     }
-
-
-
-    onMounted(() => {
-
-    })
-    return {
-      loginForm,
-      handlerLogin,
-      loginRules,
-      cookies,
-      btnLoading
-    }
-  },
+  }).catch(error => {
+    btnLoading.value = false
+    console.log(error)
+  })
 }
+
+
+
+onMounted(() => {
+
+})
+
 </script>
 
 <style scoped src="@/assets/styles/login.css"></style>

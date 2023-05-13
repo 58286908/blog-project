@@ -2,16 +2,17 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-29 22:29:24
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-05 11:01:39
+ * @LastEditTime: 2023-05-13 01:05:53
  * @FilePath: \blog-web\src\components\Navigate.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <el-aside width="12vw" style="height: 100vh;">
+  <el-aside width="12vw" style="height: 100vh;" v-loading="asideLoading">
     <el-scrollbar ref="scrollbar">
       <el-menu default-active="1" :router="true">
         <!-- {{ menuList }} -->
-        <el-sub-menu v-for="item in menuList" :index="item.id + ''" :value="item.id" :label="item.menName" :key="item.id">
+        <el-sub-menu v-for="item in menuList" :index="item.id + ''" :value="item.id" :label="item.menuName"
+          :key="item.id">
           <template #title>
             <el-icon v-if="item.icon != 'Vue'">
               <component v-if="item.icon != '#'" :is="item.icon"></component>
@@ -40,27 +41,33 @@
     </el-scrollbar>
   </el-aside>
 </template>
-<script>
-import { onMounted, reactive } from 'vue'
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { listByMenu } from "@/api/SysMenu"
-export default {
-  setup () {
-
-    const menuList = reactive([])
-
-    function listMenu () {
-      listByMenu().then((res) => {
-        menuList.push(...res.data.data)
-      })
-    }
-
-    onMounted(() => {
-      listMenu()
-    })
-    return {
-      menuList,
-      listMenu
-    }
-  },
+interface Menu {
+  icon: string;
+  children: any;
+  menuName: string;
+  id: number
 }
+let menuList = ref<Menu[]>([{
+  icon: '',
+  children: [],
+  menuName: '',
+  id: 0
+}])
+const asideLoading = ref(false)
+function listMenu() {
+  menuList.value = []
+  asideLoading.value = true
+  listByMenu().then((res) => {
+    asideLoading.value = false
+    menuList.value.push(...res.data.data)
+  })
+}
+
+onMounted(() => {
+  listMenu()
+})
 </script>

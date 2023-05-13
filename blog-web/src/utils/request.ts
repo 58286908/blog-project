@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-20 02:10:02
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-04-28 21:49:32
+ * @LastEditTime: 2023-05-12 20:13:52
  * @FilePath: \blog-web\src\utils\request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -37,8 +37,8 @@ const anonymous = axios.create({
 
 // request拦截器
 service.interceptors.request.use(
-    (config) => {
-      let token = sessionStorage.getItem("token")
+    (config:any) => {
+      const token:string|null = sessionStorage.getItem("token")
         if (token && !config.isJmReport) {
           // console.log(config)
             config.headers.Authorization = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改

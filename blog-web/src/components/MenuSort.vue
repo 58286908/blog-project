@@ -34,115 +34,89 @@
   </el-dialog>
 </template>
 
-<script>
-import { useVModel } from '@vueuse/core'
-import { ref, onMounted, reactive, getCurrentInstance } from 'vue'
+<script setup lang="ts">
+// import { useVModel } from '@vueuse/core'
+import { ref, onMounted, reactive, getCurrentInstance, defineProps, toRef, defineExpose } from 'vue'
 import { listByMenu } from "@/api/SysMenu"
-export default {
-  props: {
-    menuFormProp: {
-      type: Object,
-      default: () => { },
-      require: true
-    },
-    menuOptions: {
-      type: Array,
-      default: () => []
-    },
-    closeMenuDialog: {
-      type: Function,
-      default: (() => { })
-    },
-    saveMenu: {
-      type: Function,
-      default: (() => { })
-    },
-    // updateMenu: {
-    //   type: Function,
-    //   default: (() => { })
-    // }
-    // beforeClose: {
-    //   type: Function,
-    //   default: (() => { })
-    // },
+const props = defineProps({
+  menuFormProp: {
+    type: Object,
+    default: () => { },
+    require: true
   },
-
-  setup (props, { emit }) {
-
-    const { proxy } = getCurrentInstance()
-    //弹窗显示
-    const sortOpen = ref(false)
-    // useVModel(props, 'menuDialog', emit)
-
-    //弹窗表单
-    const menuForm = useVModel(props, 'menuFormProp', emit)
-    function beforeClose (done) {
-      console.log(done)
-      console.log(done.shouldCancel)
-      sortOpen.value = false
-    }
-
-    const menuName = 'menuName'
-
-    const cascaderProp = reactive({
-      checkStrictly: true,
-      value: 'id',
-      label: 'menuName',
-      expandTrigger: 'hover'
-    })
-
-    //打开弹窗触发
-    const openDialog = (() => {
-      listMenu()
-    })
-
-    //下拉框选择值改变时
-    const handleChange = (val) => {
-      const id = val[0]
-      menuForm.value.parentId = id
-      // console.log(id)
-      // console.log(menuForm)
-    }
-
-    //
-    const visibleChange = ((value) => {
-      console.log(value)
-    })
-
-    let options = reactive([])
-
-
-
-    async function listMenu () {
-      options.length = 0
-      await listByMenu().then((res) => {
-        options.push(...res.data.data)
-        if (res.data.code !== 200)
-          proxy.$message.error(res.data.msg)
-      })
-    }
-
-    onMounted(() => {
-
-    })
-
-
-    return {
-      options,
-      handleChange,
-      sortOpen,
-      menuForm,
-      menuName,
-      visibleChange,
-      openDialog,
-      cascaderProp,
-      beforeClose,
-    }
-
+  menuOptions: {
+    type: Array,
+    default: () => []
   },
+  closeMenuDialog: {
+    type: Function,
+    default: (() => { })
+  },
+  saveMenu: {
+    type: Function,
+    default: (() => { })
+  },
+})
 
+
+const { proxy }: any = getCurrentInstance()
+//弹窗显示
+const sortOpen = ref<boolean>(false)
+// useVModel(props, 'menuDialog', emit)
+
+//弹窗表单
+const menuForm = toRef(props, 'menuFormProp')
+
+// function beforeClose(done) {
+//   console.log(done)
+//   console.log(done.shouldCancel)
+//   sortOpen.value = false
+// }
+
+// const menuName = 'menuName'
+
+const cascaderProp = reactive({
+  checkStrictly: true,
+  value: 'id',
+  label: 'menuName',
+  expandTrigger: 'hover'
+})
+
+//打开弹窗触发
+const openDialog = (() => {
+  listMenu()
+})
+
+//下拉框选择值改变时
+const handleChange = (val: any) => {
+  const id = val[0]
+  menuForm.value.parentId = id
+  // console.log(id)
+  // console.log(menuForm)
 }
 
+//
+const visibleChange = ((value: any) => {
+  console.log(value)
+})
+
+let options = reactive<object[]>([])
+
+
+
+async function listMenu() {
+  options.length = 0
+  await listByMenu().then((res) => {
+    options.push(...res.data.data)
+    if (res.data.code !== 200)
+      proxy.$message.error(res.data.msg)
+  })
+}
+
+onMounted(() => {
+
+})
+defineExpose({ sortOpen })
 </script>
 
 <style></style>

@@ -24,6 +24,7 @@ public class TextInfoController {
     private ITextInfoService textInfoService;
     @Resource
     private ISysMenuService sysMenuService;
+    private int testNum = 0;
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('admin')")
@@ -47,6 +48,7 @@ public class TextInfoController {
 
     @PostMapping("list")
     public ResponseResult list(@RequestBody String menuName) {
+        testNum+=1;
         List<TextInfo> list;
         QueryWrapper<TextInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().orderByDesc(TextInfo::getCreateTime);
