@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: blog-user
+
+  profiles:
+    active: dev
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 106.52.110.165:8848
+        config:
+          file-extension: yaml
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        enabled: true

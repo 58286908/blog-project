@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-30 11:11:18
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-13 02:32:13
+ * @LastEditTime: 2023-05-16 17:05:43
  * @FilePath: \blog-web\src\components\BlogMain.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -56,7 +56,7 @@
 import { save } from "@/api/SysMenu"
 import WangEditor from "@/components/WangEditor.vue";
 import MenuSort from "@/components/MenuSort.vue";
-import { ref, reactive, onMounted, getCurrentInstance, nextTick, defineExpose } from "vue";
+import { ref, reactive, onMounted, getCurrentInstance, nextTick } from "vue";
 import { list, getById } from "@/api/textInfo"
 import { LocationQueryValue, useRoute, useRouter } from 'vue-router';
 
@@ -204,7 +204,7 @@ function blogContentUpdate(id: number) {
 }
 onMounted(() => {
 })
-
+/*global defineExpose,*/
 defineExpose({ cardChangeCard })
 
 </script>

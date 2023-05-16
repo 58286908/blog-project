@@ -36,8 +36,9 @@
 
 <script setup lang="ts">
 // import { useVModel } from '@vueuse/core'
-import { ref, onMounted, reactive, getCurrentInstance, defineProps, toRef, defineExpose } from 'vue'
+import { ref, onMounted, reactive, getCurrentInstance, toRef } from 'vue'
 import { listByMenu } from "@/api/SysMenu"
+/*global defineExpose,defineProps*/
 const props = defineProps({
   menuFormProp: {
     type: Object,

@@ -27,11 +27,12 @@
 <script setup lang="ts">
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, shallowRef, onMounted, reactive, getCurrentInstance, defineProps, defineEmits, toRef } from "vue";
+import { onBeforeUnmount, shallowRef, onMounted, reactive, getCurrentInstance, toRef } from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 // import { useVModel } from '@vueuse/core';
 import { save, update } from '@/api/textInfo'
 import { listByMenu } from "@/api/SysMenu"
+/*global defineEmits,defineProps*/
 const props = defineProps({
   open: {
     type: Boolean,

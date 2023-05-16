@@ -1,0 +1,60 @@
+server:
+  port: 8002
+  servlet:
+    context-path: /blog
+#jwt: data :这个路径是根据JWTUtil中的
+#@ConfigurationProperties("jwt.data")配置的
+
+jwt:
+  data:
+    #    jwt加密密钥
+    SECRET: jwt-token-secret
+    #    jwt储存的请求头Authorization固定写法
+    tokenHeader: Authorization
+    #      jwt的过期时间(60s*60min*24h*7day)
+    expiration: 86400000
+    #    jwt负载中拿到的头信息
+    tokenHead: Bearer
+
+spring:
+
+  redis:
+    # Redis本地服务器地址，注意要开启redis服务，即那个redis-server.exe
+    host: 106.52.110.165
+    # Redis服务器端口,默认为6379.若有改动按改动后的来
+    port: 6379
+    #Redis服务器连接密码，默认为空，若有设置按设置的来
+    password: byxq123456
+
+  datasource:
+    url : jdbc:mysql://106.52.110.165:3306/blog_base?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    username : blog_admin
+    password : 123456
+    driverClassName : com.mysql.cj.jdbc.Driver
+    hikari :
+      max-lifetime: 120000
+      connection-timeout: 60000
+      validation-timeout: 3000
+      idle-timeout: 30000
+      minimum-idle: 10
+      maximum-pool-size: 10
+      connection-test-query: select 1
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      logic-delete-value: 0 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 1 # 逻辑未删除值(默认为 0)
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:8004/eureka
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: BASIC

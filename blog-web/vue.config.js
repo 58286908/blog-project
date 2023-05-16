@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-16 21:43:44
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-01 22:13:31
+ * @LastEditTime: 2023-05-16 16:17:08
  * @FilePath: \blog-web\vue.config.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,11 +18,14 @@ module.exports = defineConfig({
   configureWebpack:{
   devServer:{
     proxy:{
-      '/api':{
+      [process.env.VUE_APP_BASE_API]:{
         // target:'http://localhost:8002',
-        target:'http://127.0.0.1:8002',
+        target:'http://127.0.0.1:8001',
         changeOrigin: true,
-        secure: false, 
+        secure: false,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        } 
       }
     }
     

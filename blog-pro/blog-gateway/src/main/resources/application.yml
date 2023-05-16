@@ -1,0 +1,35 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /
+
+spring:
+  redis:
+    # Redis本地服务器地址，注意要开启redis服务，即那个redis-server.exe
+    host: 106.52.110.165
+    # Redis服务器端口,默认为6379.若有改动按改动后的来
+    port: 6379
+    #Redis服务器连接密码，默认为空，若有设置按设置的来
+    password: byxq123456
+
+  cloud:
+    gateway:
+      routes:
+        - id: blog-user #唯一标识
+          uri: lb://blog-user #路由的目标地址
+          predicates: #路由断言，判断是否符合规则
+            - Path=/user/**
+#          filters:
+#            - StripPrefix = 2
+
+        - id: blog-center
+          uri: lb://blog-center
+          predicates:
+            - Path=/blog/**
+#          filters:
+#            - SetPath=/api/**
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:8004/eureka
