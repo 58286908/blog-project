@@ -1,6 +1,6 @@
 package cn.apr.user.service;
 
-import cn.apr.user.utils.ResponseResult;
+import cn.apr.common.utils.ResponseResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.apr.user.domain.SysUser;
 

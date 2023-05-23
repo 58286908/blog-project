@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-30 11:11:18
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-16 17:05:43
+ * @LastEditTime: 2023-05-21 21:42:31
  * @FilePath: \blog-web\src\components\BlogMain.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -59,7 +59,7 @@ import MenuSort from "@/components/MenuSort.vue";
 import { ref, reactive, onMounted, getCurrentInstance, nextTick } from "vue";
 import { list, getById } from "@/api/textInfo"
 import { LocationQueryValue, useRoute, useRouter } from 'vue-router';
-
+import headUrl from "@/utils/HeadImag";
 type str = {
   menuName: string | LocationQueryValue[]
 }
@@ -74,7 +74,7 @@ interface card {
 const isDark = ref(true)
 const { proxy }: any = getCurrentInstance()
 const cardOpen = ref(true)
-const headUrl = 'https://avatars.githubusercontent.com/u/94176780?v=4'
+
 const navigationLoading = ref(false)
 function cardChangeCard() {
   cardOpen.value = false

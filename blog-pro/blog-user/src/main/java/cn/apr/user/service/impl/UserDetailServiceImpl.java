@@ -1,7 +1,7 @@
 package cn.apr.user.service.impl;
 
-import cn.apr.user.clients.BlogClient;
-import cn.apr.user.utils.ResponseResult;
+import cn.apr.common.feign.BlogClient;
+import cn.apr.common.utils.ResponseResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import cn.apr.user.domain.LoginUser;
 import cn.apr.user.domain.SysUser;

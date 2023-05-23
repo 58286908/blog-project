@@ -1,7 +1,7 @@
 server:
   port: 8002
   servlet:
-    context-path: /blog
+    context-path: /
 #jwt: data :这个路径是根据JWTUtil中的
 #@ConfigurationProperties("jwt.data")配置的
 
@@ -17,7 +17,6 @@ jwt:
     tokenHead: Bearer
 
 spring:
-
   redis:
     # Redis本地服务器地址，注意要开启redis服务，即那个redis-server.exe
     host: 106.52.110.165

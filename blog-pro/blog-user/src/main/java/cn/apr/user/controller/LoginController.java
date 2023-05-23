@@ -1,12 +1,10 @@
 package cn.apr.user.controller;
 
-import cn.apr.user.utils.ResponseResult;
+import cn.apr.common.utils.ResponseResult;
 import cn.apr.user.domain.SysUser;
 import cn.apr.user.service.ISysUserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -40,5 +38,13 @@ public class LoginController {
     @RequestMapping("test")
     public String test(){
         return "success！";
+    }
+
+    @PostMapping("getUserByName")
+    public ResponseResult getUserByName(@RequestParam("userName")String userName){
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysUser::getUsername,userName);
+        SysUser sysUser = sysUserService.getBaseMapper().selectOne(queryWrapper);
+        return ResponseResult.success(sysUser);
     }
 }

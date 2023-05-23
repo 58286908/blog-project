@@ -1,13 +1,13 @@
 package cn.apr.user.service.impl;
 
+import cn.apr.common.utils.JwtUtil;
+import cn.apr.common.utils.RedisCaChe;
+import cn.apr.common.utils.ResponseResult;
 import cn.apr.user.service.ISysUserService;
-import cn.apr.user.utils.ResponseResult;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.apr.user.domain.LoginUser;
 import cn.apr.user.domain.SysUser;
 import cn.apr.user.mapper.SysUserMapper;
-import cn.apr.user.utils.JwtUtil;
-import cn.apr.user.utils.RedisCaChe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

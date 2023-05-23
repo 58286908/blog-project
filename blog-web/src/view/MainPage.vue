@@ -2,7 +2,7 @@
  * @Author: ShiShenApr tpvkeas3708@163.com
  * @Date: 2023-03-20 02:10:02
  * @LastEditors: ShiShenApr tpvkeas3708@163.com
- * @LastEditTime: 2023-05-13 02:23:20
+ * @LastEditTime: 2023-05-21 13:28:47
  * @FilePath: \blog-web\src\view\MainPage.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -120,7 +120,7 @@ onMounted(() => {
 </script>
 <style scoped>
 .bg {
-  background-color: #f7f8fa;
+  /* background-image: url(../assets/105123922_p0_master1200.jpg); */
   /* background */
 }
 

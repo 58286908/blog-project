@@ -13,6 +13,7 @@
         <module>blog-user</module>
         <module>eureka-server</module>
         <module>blog-gateway</module>
+        <module>blog-common</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -20,6 +21,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.9.RELEASE</version>
+
     </parent>
 
     <properties>

@@ -3,9 +3,9 @@ package cn.apr.center.controller;
 import cn.apr.center.domain.SysMenu;
 import cn.apr.center.mapper.SysMenuMapper;
 import cn.apr.center.service.ISysMenuService;
-import cn.apr.center.utils.ResponseResult;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import cn.apr.common.utils.ResponseResult;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -78,8 +78,8 @@ public class SysMenuController {
     }
 
     @PostMapping("selectPermsByUserId")
-    public ResponseResult selectPermsByUserId(@RequestParam("userId") Long userId){
+    public ResponseResult selectPermsByUserId(Long userId){
         List<String> list = sysMenuMapper.selectPermsByUserId(userId);
-        return ResponseResult.success(list);
+        return ResponseResult.success("操作成功",list);
     }
 }

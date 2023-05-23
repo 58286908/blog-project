@@ -1,7 +1,5 @@
 server:
   port: 8001
-  servlet:
-    context-path: /
 
 spring:
   redis:
@@ -20,15 +18,18 @@ spring:
           predicates: #路由断言，判断是否符合规则
             - Path=/user/**
 #          filters:
-#            - StripPrefix = 2
+
 
         - id: blog-center
           uri: lb://blog-center
           predicates:
             - Path=/blog/**
-#          filters:
-#            - SetPath=/api/**
-
+          filters:
+            - StripPrefix=1
+#            - name: RequestRateLimiter
+#                args:
+#                  redis-rate-limiter.replenishRate: 10
+#                  redis-rate-limiter.burstCapacity: 20
 #eureka:
 #  client:
 #    service-url:

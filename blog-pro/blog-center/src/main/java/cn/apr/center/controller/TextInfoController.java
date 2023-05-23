@@ -4,11 +4,11 @@ import cn.apr.center.domain.TextInfo;
 import cn.apr.center.service.ITextInfoService;
 import cn.apr.center.domain.SysMenu;
 import cn.apr.center.service.ISysMenuService;
-import cn.apr.center.utils.ResponseResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import cn.apr.common.utils.ResponseResult;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -22,7 +22,6 @@ public class TextInfoController {
     private ITextInfoService textInfoService;
     @Resource
     private ISysMenuService sysMenuService;
-    private int testNum = 0;
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('admin')")
@@ -46,7 +45,6 @@ public class TextInfoController {
 
     @PostMapping("list")
     public ResponseResult list(@RequestBody String menuName) {
-        testNum+=1;
         List<TextInfo> list;
         QueryWrapper<TextInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().orderByDesc(TextInfo::getCreateTime);
